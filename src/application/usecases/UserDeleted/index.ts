@@ -1,10 +1,9 @@
 import type { User } from '../../../domain/entities/User'
 import type { UserRepository } from 'domain/repositories/UserRepository'
 import { ExistUserByUserName } from '../../../domain/services/ExistUserByUserName'
-import { UserAlreadyExistsException } from '../../../domain/exceptions/UserAlreadyExistsException'
 import { MissingFieldsException } from '../../../domain/exceptions/MissingFieldsException'
 
-export class UserCreateUseCase {
+export class UserDeletedUseCase {
   private readonly _userRepository: UserRepository
   private readonly _existUserByUserName: ExistUserByUserName
 
@@ -13,15 +12,13 @@ export class UserCreateUseCase {
     this._existUserByUserName = new ExistUserByUserName(userRepository) // Usar Singleton para recuperar la instancia
   }
 
-  async run (body: User): Promise<User> {
+  async run (body: User): Promise<void> {
     if (body.username === undefined) throw new MissingFieldsException()
 
     const existUser: boolean = await this._existUserByUserName.run(body.username)
 
-    if (existUser) throw new UserAlreadyExistsException()
-
-    const userCreated: User = await this._userRepository.save(body)
-
-    return userCreated
+    if (existUser) {
+      await this._userRepository.delete(body)
+    }
   }
 }

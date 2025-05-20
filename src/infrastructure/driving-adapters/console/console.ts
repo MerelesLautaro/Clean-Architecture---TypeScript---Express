@@ -1,10 +1,13 @@
 import { UserCreateUseCase } from '../../../application/usecases/UserCreator'
+import { UserGetterUseCase } from '../../../application/usecases/UserGetter'
 import { InMemoryUserRepository } from '../../../infrastructure/implementations/inMemory/inMemoryUserRepository'
 import type { User } from '../../../domain/entities/User'
+import { UserUpdaterUseCase } from '../../../application/usecases/UserUpdater'
 
 (async () => {
   const inMemoryUserRepo = new InMemoryUserRepository()
 
+  const userGetterUseCase = new UserGetterUseCase(inMemoryUserRepo)
   const userCreateUseCase = new UserCreateUseCase(inMemoryUserRepo)
   const userToCreate: User = {
     name: 'Lautaro',
@@ -15,5 +18,16 @@ import type { User } from '../../../domain/entities/User'
 
   await userCreateUseCase.run(userToCreate)
 
-  console.log(inMemoryUserRepo.userData)
+  const usersReturned = await userGetterUseCase.run()
+  console.log(usersReturned)
+
+  const userUpdaterUseCase = new UserUpdaterUseCase(inMemoryUserRepo)
+
+  await userUpdaterUseCase.run({
+    id: '123',
+    username: 'papitas'
+  })
+
+  const usersReturned2 = await userGetterUseCase.run()
+  console.log(usersReturned2)
 })()

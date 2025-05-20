@@ -6,5 +6,5 @@ export interface UserRepository {
   getByUserName: (username: string) => Promise<User | null>
   update: (user: User) => Promise<User>
   delete: (user: User) => Promise<void>
-  getById: (user: User) => Promise<User | null>
+  getById: (id: string) => Promise<User | null>
 }
