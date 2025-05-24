@@ -3,6 +3,7 @@ import { UserGetterUseCase } from '../../../application/usecases/UserGetter'
 import { InMemoryUserRepository } from '../../../infrastructure/implementations/inMemory/inMemoryUserRepository'
 import type { User } from '../../../domain/entities/User'
 import { UserUpdaterUseCase } from '../../../application/usecases/UserUpdater'
+import { UserDeletedUseCase } from '../../../application/usecases/UserDeleted'
 
 (async () => {
   const inMemoryUserRepo = new InMemoryUserRepository()
@@ -30,4 +31,11 @@ import { UserUpdaterUseCase } from '../../../application/usecases/UserUpdater'
 
   const usersReturned2 = await userGetterUseCase.run()
   console.log(usersReturned2)
+
+  const firstUser = usersReturned2[0]
+  const userDeletedUseCase = new UserDeletedUseCase(inMemoryUserRepo)
+  userDeletedUseCase.run(firstUser)
+
+  const usersReturned3 = await userGetterUseCase.run()
+  console.log(usersReturned3)
 })()
