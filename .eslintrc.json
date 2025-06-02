@@ -1,13 +1,14 @@
 {
-    "extends": "standard-with-typescript",
-    "parserOptions": {
-        "project": "./Clean Architecture - First Project/tsconfig.json"
-    },
-    "rules": {
-      "@typescript-eslint/no-floating-promises": "off"
-    },
-    "ignorePatterns": [
-        "dist",
-        "src/**/*.js"
-    ]
+  "extends": "standard-with-typescript",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
+  },
+  "ignorePatterns": [
+    "dist",
+    "src/**/*.js"
+  ]
 }

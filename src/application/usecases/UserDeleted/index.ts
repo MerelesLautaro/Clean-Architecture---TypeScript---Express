@@ -1,6 +1,6 @@
 import type { User } from '../../../domain/entities/User'
 import type { UserRepository } from 'domain/repositories/UserRepository'
-import { ExistUserByUserName } from '../../../domain/services/ExistUserByUserName'
+import { ExistUserByUserName } from '../../services/ExistUserByUserName'
 import { MissingFieldsException } from '../../../domain/exceptions/MissingFieldsException'
 
 export class UserDeletedUseCase {
@@ -9,7 +9,7 @@ export class UserDeletedUseCase {
 
   constructor (userRepository: UserRepository) {
     this._userRepository = userRepository
-    this._existUserByUserName = new ExistUserByUserName(userRepository) // Usar Singleton para recuperar la instancia
+    this._existUserByUserName = new ExistUserByUserName(userRepository)
   }
 
   async run (body: User): Promise<void> {

@@ -1,6 +1,6 @@
 import type { User } from '../../../domain/entities/User'
 import type { UserRepository } from 'domain/repositories/UserRepository'
-import { GetUserById } from '../../../domain/services/GetterUserById'
+import { GetUserById } from '../../services/GetterUserById'
 
 export class UserUpdaterUseCase {
   private readonly _userRepository: UserRepository

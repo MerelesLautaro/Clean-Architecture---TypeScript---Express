@@ -1,6 +1,8 @@
 import type { User } from '../../../domain/entities/User'
+import type { NewUser } from '../../../domain/entities/NewUser'
+import type { CreateUserDTO } from 'application/dtos/UserCreatorDTO'
 import type { UserRepository } from 'domain/repositories/UserRepository'
-import { ExistUserByUserName } from '../../../domain/services/ExistUserByUserName'
+import { ExistUserByUserName } from '../../services/ExistUserByUserName'
 import { UserAlreadyExistsException } from '../../../domain/exceptions/UserAlreadyExistsException'
 import { MissingFieldsException } from '../../../domain/exceptions/MissingFieldsException'
 
@@ -10,17 +12,23 @@ export class UserCreateUseCase {
 
   constructor (userRepository: UserRepository) {
     this._userRepository = userRepository
-    this._existUserByUserName = new ExistUserByUserName(userRepository) // Usar Singleton para recuperar la instancia
+    this._existUserByUserName = new ExistUserByUserName(userRepository)
   }
 
-  async run (body: User): Promise<User> {
+  async run (body: CreateUserDTO): Promise<User> {
     if (body.username === undefined) throw new MissingFieldsException()
 
     const existUser: boolean = await this._existUserByUserName.run(body.username)
 
     if (existUser) throw new UserAlreadyExistsException()
 
-    const userCreated: User = await this._userRepository.save(body)
+    const userToCreate: NewUser = {
+      name: body.name,
+      username: body.username,
+      age: body.age
+    }
+
+    const userCreated: User = await this._userRepository.save(userToCreate)
 
     return userCreated
   }
